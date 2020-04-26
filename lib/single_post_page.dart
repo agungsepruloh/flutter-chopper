@@ -15,13 +15,26 @@ class SinglePostPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Chopper Blog'),
       ),
+      // Specify the type held by the Response
       body: FutureBuilder<Response<BuiltPost>>(
         future: Provider.of<PostApiService>(context).getPost(postId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            // Exceptions thrown by the Future are stored inside the "error" field of the AsyncSnapshot
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  snapshot.error.toString(),
+                  textAlign: TextAlign.center,
+                  textScaleFactor: 1.5,
+                ),
+              );
+            }
+            //* Body of the response is now type-safe and of type BuiltPost.
             final post = snapshot.data.body;
             return _buildPost(post);
           } else {
+            // Show a loading indicator while waiting for the post
             return Center(
               child: CircularProgressIndicator(),
             );
