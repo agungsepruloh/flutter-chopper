@@ -18,8 +18,9 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () async {
-          final response = await Provider.of<PostApiService>(context)
-              .postPost({'key': 'value'});
+          final response =
+              await Provider.of<PostApiService>(context, listen: false)
+                  .postPost({'key': 'value'});
           print(response.body);
         },
       ),
