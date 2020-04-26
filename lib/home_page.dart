@@ -32,6 +32,16 @@ class HomePage extends StatelessWidget {
       future: Provider.of<PostApiService>(context).getPosts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                snapshot.error.toString(),
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.5,
+              ),
+            );
+          }
+
           final List posts = json.decode(snapshot.data.bodyString);
           return _buildPosts(context, posts);
         } else {
